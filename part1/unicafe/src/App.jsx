@@ -29,9 +29,9 @@ const Statistics = (props) => {
         <p>No feedback given</p>
       ) : (
         <>
-          <p>good {props.good}</p>
-          <p>neutral {props.neutral}</p>
-          <p>bad {props.bad}</p>
+          <StatisticLine text="good" value={props.good} />
+          <StatisticLine text="neutral" value={props.neutral} />
+          <StatisticLine text="bad" value={props.bad} />
           <p>all {props.good + props.neutral + props.bad}</p>
           <p>
             average{" "}
@@ -47,3 +47,9 @@ const Statistics = (props) => {
     </div>
   );
 };
+
+const StatisticLine = ({ text, value }) => (
+  <p>
+    {text} {value}
+  </p>
+);
