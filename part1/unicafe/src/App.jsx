@@ -1,10 +1,10 @@
-import { useState } from 'react'
+import { useState } from "react";
 
 const App = () => {
   // guarda los clics de cada botón en su propio estado
-  const [good, setGood] = useState(0)
-  const [neutral, setNeutral] = useState(0)
-  const [bad, setBad] = useState(0)
+  const [good, setGood] = useState(0);
+  const [neutral, setNeutral] = useState(0);
+  const [bad, setBad] = useState(0);
 
   return (
     <div>
@@ -14,27 +14,36 @@ const App = () => {
       <Button onClick={() => setBad(bad + 1)} text="bad" />
       <Statistics good={good} neutral={neutral} bad={bad} />
     </div>
-  )
-}
+  );
+};
 
-export default App
+export default App;
 
-const Button = ({ onClick, text }) => (
-  <button onClick={onClick}>
-    {text}
-  </button>
-)
+const Button = ({ onClick, text }) => <button onClick={onClick}>{text}</button>;
 
 const Statistics = (props) => {
   return (
     <div>
       <h1>statistics</h1>
-      <p>good {props.good}</p>
-      <p>neutral {props.neutral}</p>
-      <p>bad {props.bad}</p>
-      <p>all {props.good+props.neutral+props.bad}</p>
-      <p>average {(props.good - props.bad) / (props.good + props.neutral + props.bad)}</p>
-      <p>positive {props.good / (props.good + props.neutral + props.bad) * 100} %</p>
+      {props.good + props.neutral + props.bad === 0 ? (
+        <p>No feedback given</p>
+      ) : (
+        <>
+          <p>good {props.good}</p>
+          <p>neutral {props.neutral}</p>
+          <p>bad {props.bad}</p>
+          <p>all {props.good + props.neutral + props.bad}</p>
+          <p>
+            average{" "}
+            {(props.good - props.bad) /
+              (props.good + props.neutral + props.bad)}
+          </p>
+          <p>
+            positive{" "}
+            {(props.good / (props.good + props.neutral + props.bad)) * 100} %
+          </p>
+        </>
+      )}
     </div>
-  )
-}
+  );
+};
