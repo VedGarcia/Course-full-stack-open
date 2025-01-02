@@ -5,17 +5,22 @@ const App = () => {
   const [newName, setNewName] = useState("Martin Fowler");
 
   const handleNoteChange = (event) => {
-    setNewName(event.target.value)
-  }
+    setNewName(event.target.value);
+  };
 
   const addPerson = (event) => {
-    event.preventDefault()
-    const personObject = {
-      name: newName
+    event.preventDefault();
+    const personObject = { name: newName };
+
+    const isRepeated = persons.some((person) => person.name === newName);
+    
+    if (isRepeated) {
+      alert(`${newName} is already added to phonebook`);
+    } else {
+      setPersons(persons.concat(personObject));
+      setNewName("");
     }
-    setPersons(persons.concat(personObject))
-    setNewName("")
-  }
+  };
 
   return (
     <div>
