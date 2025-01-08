@@ -42,6 +42,12 @@ const App = () => {
       setNewName("");
       setNewNumber("");
     }
+
+    axios
+      .post("http://localhost:3001/persons", personObject)
+      .then(response => {
+        console.log(response)
+      })
   };
 
   const personsToShow = persons.filter((person) =>
