@@ -50,7 +50,18 @@ const App = () => {
     }
 
   };
-
+  const deletePerson = (id) => {
+    const person = persons.find((person) => person.id === id);
+    const result = window.confirm(`Delete ${person.name} ?`);
+    if (result) {
+      contactServices
+        .deleteContact(id)
+        .then((response) => {
+          setPersons(persons.filter((person) => person.id !== id));
+        });
+    }
+  };
+ 
   const personsToShow = persons.filter((person) =>
     person.name.toLowerCase().includes(filter.toLowerCase())
   );
@@ -66,7 +77,7 @@ const App = () => {
         handleNoteChange={handleNoteChange}
         handleNumberChange={handleNumberChange}
       />
-      <Person personsToShow={personsToShow} />
+      <Person personsToShow={personsToShow} deletePerson={deletePerson} />
     </div>
   );
 };
