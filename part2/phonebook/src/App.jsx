@@ -59,7 +59,15 @@ const App = () => {
             );
             setNewName("");
             setNewNumber("");
-            setMessage(`Updated ${response.data.name}`);
+            setMessage({ text: `Updated ${response.data.name}`, class: "success" });
+          })
+          .catch((error) => {
+            setMessage({
+              text: `Information of ${person.name} has already been removed from server`,
+              class: "error",
+            }
+            );
+            setPersons(persons.filter((p) => p.id !== person.id));
           });
       }
     } else {
@@ -67,7 +75,7 @@ const App = () => {
         .create(personObject)
         .then((response) => {
           setPersons(persons.concat(response.data));
-          setMessage(`Added ${response.data.name}`);
+          setMessage({ text: `Added ${response.data.name}`, class: "success" });
           setNewName("");
           setNewNumber("");
         });
@@ -84,7 +92,7 @@ const App = () => {
         .then((response) => {
           setPersons(persons.filter((person) => person.id !== id));
         });
-      setMessage(`Deleted ${person.name}`);
+      setMessage({ text: `Deleted ${person.name}`, class: "success" });
     }
   };
  
