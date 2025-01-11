@@ -33,23 +33,38 @@ const App = () => {
   const addPerson = (event) => {
     event.preventDefault();
     const personObject = { name: newName, number: newNumber };
-
+  
     const isRepeated = persons.some((person) => person.name === newName);
-
+  
     if (isRepeated) {
-      alert(`${newName} is already added to phonebook`);
+      const question = window.confirm(`${newName} is already added to phonebook, replace the old number with a new one?`);
+      if (question) {
+        const person = persons.find((person) => person.name === newName);
+        contactServices
+          .update(person.id, personObject)
+          .then((response) => {
+            setPersons(
+              persons.map((p) =>
+                p.id !== person.id ? p : response.data
+              )
+            );
+            setNewName("");
+            setNewNumber("");
+          });
+      }
     } else {
-      setPersons(persons.concat(personObject));
-      setNewName("");
-      setNewNumber("");
       contactServices
         .create(personObject)
-        .then(response => {
-          console.log(response)
-        })
+        .then((response) => {
+          setPersons(persons.concat(response.data));
+          setNewName("");
+          setNewNumber("");
+          console.log(response);
+        });
     }
-
   };
+  
+    
   const deletePerson = (id) => {
     const person = persons.find((person) => person.id === id);
     const result = window.confirm(`Delete ${person.name} ?`);
