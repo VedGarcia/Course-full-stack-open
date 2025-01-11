@@ -4,12 +4,14 @@ import contactServices from "./services/contact";
 import Filter from "./components/Filter";
 import PersonForm from "./components/PersonForm";
 import Person from "./components/Person";
+import Notification from "./components/Notification";
 
 const App = () => {
   const [persons, setPersons] = useState([]);
   const [newName, setNewName] = useState("Martin Fowler");
   const [newNumber, setNewNumber] = useState("0424-1234568");
   const [filter, setFilter] = useState("");
+  const [message, setMessage] = useState(null);
 
   useEffect(() => {
     contactServices
@@ -18,6 +20,13 @@ const App = () => {
       setPersons(response.data);
       });
   }, []);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setMessage(null);
+    }, 5000);
+    return () => clearTimeout(timer);
+  }, [message]);
 
   const handleNoteChange = (event) => {
     setNewName(event.target.value);
@@ -50,6 +59,7 @@ const App = () => {
             );
             setNewName("");
             setNewNumber("");
+            setMessage(`Updated ${response.data.name}`);
           });
       }
     } else {
@@ -57,9 +67,9 @@ const App = () => {
         .create(personObject)
         .then((response) => {
           setPersons(persons.concat(response.data));
+          setMessage(`Added ${response.data.name}`);
           setNewName("");
           setNewNumber("");
-          console.log(response);
         });
     }
   };
@@ -74,6 +84,7 @@ const App = () => {
         .then((response) => {
           setPersons(persons.filter((person) => person.id !== id));
         });
+      setMessage(`Deleted ${person.name}`);
     }
   };
  
@@ -84,6 +95,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={message}/>
       <Filter handleFilter={handleFilter} />
       <PersonForm
         addPerson={addPerson}
