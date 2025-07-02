@@ -4,6 +4,7 @@ import getCountries from "./services/get_countries";
 function App() {
   const [search, setSearch] = useState("");
   const [countries, setCountries] = useState([]);
+  const [selectedCountryName, setSelectedCountryName] = useState(null);
 
   useEffect(() => {
     getCountries.getAll().then((response) => {
@@ -19,6 +20,11 @@ function App() {
   const filteredCountries = countries.filter((country) =>
     country.name.official.includes(search.toLowerCase())
   );
+
+  const handleShowDetails = (countryName) => {
+    setSelectedCountryName(selectedCountryName === countryName ? null : countryName);
+  }
+
   return (
     <>
       <h1>Countries</h1>
@@ -53,7 +59,26 @@ function App() {
               filteredCountries.map((country) => (
                 <li key={country.name.common}>
                   <p>
-                    {country.name.official} - {country.name.common}
+                    {country.name.official} - {country.name.common} <button onClick={() => handleShowDetails(country.name.common)}>Show</button>
+                     {selectedCountryName === country.name.common ? (
+                       <div>
+                    <h3>{country.name.official}</h3>
+                    <p>Capital: {country.capital}</p>
+                    <p>Population: {country.population}</p>
+                   <h4>Languages</h4>
+                   <ul>
+                    {Object.values(country.languages).map((language) => (
+                      <li key={language}>{language}</li>
+                    ))}
+                  </ul>
+                  <img
+                    src={country.flags.png}
+                    alt={`Flag of ${country.name.common}`}
+                    width="200"
+                  />
+                </div>
+                     ): null}
+                        
                   </p>
                 </li>
               ))
